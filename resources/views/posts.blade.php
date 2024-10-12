@@ -1,41 +1,72 @@
 @extends('app')
 
 @section('content')
-    <!-- Cover view -->
-    <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
-        <div class="col-md-6 px-0">
-        <h1 class="display-4 fst-italic">Title of a longer featured blog post</h1>
-        <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
-        </div>
-    </div>
     <!-- Posts view -->
     <div class="row mb-2">
-        <div class="col-md-3">
-            <a href="{{ route('posts.create') }}" class="btn btn-success">+ Tambah Data</a>
-        </div>
-    </div>
-    <div class="row mb-2">
+        <table class="table table-striped-columns">
+            <tr>
+                <th>No.</th>
+                <th>Nama</th>
+                <th>Alamat</th>
+                <th>Tanggal Lahir</th>
+                <th>Nama Ruang</th>
+                <th>Action</th>
+            </tr>
+
+        @php
+          $no =1;
+        @endphp
         @foreach($posts as $post)
         @php($post = explode(',', $post))
-        <div class="col-md-6">
-        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-            <div class="col p-4 d-flex flex-column position-static">
-            <h3 class="mb-0">{{ $post[1] }}</h3>
-            <div class="mb-1 text-muted">{{ $post[3] }}</div>
-            <p class="card-text mb-auto">{{ $post[2] }}</p>
-            <a href="{{ route('posts.show', $post[0]) }}">Continue reading</a>
-            <a href="{{ route('posts.edit', $post[0]) }}">Edit</a>
-            <form action="{{ route('posts.destroy', $post[0]) }}" method="post">
-                @csrf
-                @method('delete')
-                <input type="submit" value="Delete" class="btn btn-outline-danger">
-            </form>
-            </div>
-            <div class="col-auto d-none d-lg-block">
-            <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-            </div>
-        </div>
-        </div>
+            <tr>
+                <td>{{$no++;}}</td>
+                <td>{{ $post[1] }}</td>
+                <td>{{ $post[2] }}</td>
+                <td>{{ $post[3] }}</td>
+                <td>{{ $post[4] }}</td>
+                <td>
+                    <a class="btn btn-sm btn-success" href="{{ route('posts.edit', $post[0]) }}">Edit</a>
+                    <form action="{{ route('posts.destroy', $post[0]) }}" method="post">
+                        @csrf
+                        @method('delete')
+                        <input type="submit" value="Delete" class="btn btn-sm btn-danger">
+                    </form>
+                </td>
+
+            </tr>
         @endforeach
+        </table>
+    </div>
+
+    {{-- Form tambah data --}}
+    <div class="mt-3">
+        <h2>Tambah Data</h2>
+        <form action="{{ route('posts.store') }}" method="post">
+            @csrf
+            <div class="mb-3">
+              <label for="nama" class="form-label">Nama</label>
+              <input type="text" class="form-control" name="nama" id="nama" placeholder="create new nama">
+            </div>
+            <div class="mb-3">
+                <label for="alamat" class="form-label">Alamat</label>
+                <textarea class="form-control" id="alamat" style="height: 100px" name="alamat"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                <input type="date" name="tanggal_lahir" id="tanggal_lahit">
+            </div>
+            <div class="mb-3">
+                <label for="nama_ruang" class="form-label">Nama Ruang</label>
+                <select class="form-select" aria-label="Default select example" name="nama_ruang" id="nama_ruang">
+                    <option selected>Open this select menu</option>
+                    <option value="Ruang 1">Ruang 1</option>
+                    <option value="Ruang 2">Ruang 2</option>
+                    <option value="Ruang 3">Ruang 3</option>
+                  </select>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
     </div>
 @endsection

@@ -16,7 +16,7 @@ class PostController extends Controller
     {
         $posts = Storage::get("posts.txt");
         $posts = explode("\n", $posts);
-        
+
         return view('posts', ['posts'=>$posts]);
     }
 
@@ -27,7 +27,6 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post-create');
     }
 
     /**
@@ -46,14 +45,17 @@ class PostController extends Controller
         $post = explode(',', $posts[count($posts)-1]);
         $id = $post[0];
 
-        $judul = $request->judul;
-        $isi_post = $request->isi_post;
-        
+        $nama = $request->nama;
+        $alamat = $request->alamat;
+        $tanggal_lahir = $request->tanggal_lahir;
+        $nama_ruang = $request->nama_ruang;
+
         $post = [
             $id+1,
-            $judul, 
-            $isi_post, 
-            date('Y-m-d H:i:s')
+            $nama,
+            $alamat,
+            $tanggal_lahir,
+            $nama_ruang,
         ];
 
         $post = implode(',', $post);
@@ -92,15 +94,17 @@ class PostController extends Controller
     {
         $posts = Storage::get('posts.txt');
         $posts = explode("\n", $posts);
-        
+
         $post = $posts[$id];
         $post = explode(',', $post);
 
         // dd($post);
         return view('post-edit',[
             'id'=>$post[0],
-            'judul'=>$post[1],
-            'isi_post'=>$post[2],
+            'nama'=>$post[1],
+            'alamat'=>$post[2],
+            'tanggal_lahir'=>$post[3],
+            'nama_ruang'=>$post[4],
         ]);
     }
 
@@ -116,23 +120,26 @@ class PostController extends Controller
         // mengambil file storage
         $posts = Storage::get("posts.txt");
         $posts = explode("\n", $posts);
-        
+
         // menangkap id terakhir
         $post = explode(',', $posts[$id]);
-        
-        $judul = $request->judul;
-        $isi_post = $request->isi_post;
-        
+
+        $nama = $request->nama;
+        $alamat = $request->alamat;
+        $tanggal_lahir = $request->tanggal_lahir;
+        $nama_ruang = $request->nama_ruang;
+
         $post = [
-            $id,
-            $judul, 
-            $isi_post, 
-            date('Y-m-d H:i:s')
+            $id+1,
+            $nama,
+            $alamat,
+            $tanggal_lahir,
+            $nama_ruang,
         ];
 
         $post = implode(',', $post);
         $posts[$id] = $post;
-        
+
         $posts = implode("\n", $posts);
 
         Storage::write('posts.txt', $posts);
@@ -150,9 +157,9 @@ class PostController extends Controller
     {
         $posts = Storage::get("posts.txt");
         $posts = explode("\n", $posts);
-        
+
         unset($posts[$id]);
-        
+
         $posts = implode("\n", $posts);
 
         Storage::write('posts.txt', $posts);
